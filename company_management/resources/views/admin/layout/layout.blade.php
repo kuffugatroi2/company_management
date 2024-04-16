@@ -3,6 +3,9 @@
 
 <head>
     <base href="{{ asset('') }}">
+    <link rel="icon"
+		href="img-logo/VT_luxury.png"
+		type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
@@ -10,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-    <title>Gentelella Alela! | </title>
+    <title>VT LUXURY - Foot, brain & difference</title>
 
     <!-- Bootstrap -->
     <link href="backend/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
