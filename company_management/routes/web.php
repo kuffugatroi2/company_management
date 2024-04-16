@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return "Welcome back Martin Nguyen";
-});
+Route::get('/', [AuthenticationController::class, 'index'])->name('login');
+Route::post('login', [AuthenticationController::class, 'login'])->name('admin_authentication.login');
+Route::get('logout', [AuthenticationController::class, 'logout'])->name('admin_authentication.logout');
+
+
 
 /*---------------------------------------------------ADMIN-----------------------------------------------------------------*/
 
-Route::get('home-page', [HomeController::class, 'index'])->name('admin.home');
-Route::resource('users', UserController::class);
-Route::post('delete-all-user', [UserController::class, 'deleteAll'])->name('users.delete_all');
+Route::middleware(['auth'])->group(function() {
+    Route::prefix('admin')->group(function() {
+        Route::get('home-page', [HomeController::class, 'index'])->name('admin.home_page');
+        Route::resource('users', UserController::class);
+        Route::post('delete-all-user', [UserController::class, 'deleteAll'])->name('users.delete_all');
+    });
+});
