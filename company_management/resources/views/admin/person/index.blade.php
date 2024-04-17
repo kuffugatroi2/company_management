@@ -13,23 +13,23 @@
                 </div>
                 <div class="x_content d-none" id="filter-form">
                     <br />
-                    <form action="{{ route('companies.index') }}" method="GET" id="demo-form2" data-parsley-validate
+                    <form action="{{ route('persons.index') }}" method="GET" id="demo-form2" data-parsley-validate
                         class="form-horizontal form-label-left">
                         <div class="container">
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group row ">
-                                        <label class="control-label col-md-3 col-sm-3 ">Code</label>
+                                        <label class="control-label col-md-3 col-sm-3 ">Nhân viên</label>
                                         <div class="col-md-9 col-sm-9 ">
-                                            <input type="text" class="form-control" name="code"
-                                                placeholder="Vui lòng nhập mã code cần tìm">
+                                            <input type="text" class="form-control" name="full_name"
+                                                placeholder="Vui lòng nhập tên nhân viên cần tìm">
                                         </div>
                                     </div>
                                     <div class="form-group row ">
-                                        <label class="control-label col-md-3 col-sm-3 ">Công ty</label>
+                                        <label class="control-label col-md-3 col-sm-3 ">Số điện thoại</label>
                                         <div class="col-md-9 col-sm-9 ">
-                                            <input type="text" class="form-control" name="name"
-                                                placeholder="Vui lòng nhập công ty cần tìm">
+                                            <input type="text" class="form-control" name="phone_number"
+                                                placeholder="Vui lòng nhập số điện thoại cần tìm">
                                         </div>
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@
                     @include('Layout.messenger')
                 </div>
                 <div class="x_title">
-                    <h2>Danh sách công ty   </h2>
+                    <h2>Danh sách nhân viên</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -79,9 +79,9 @@
                                     <div class="row">
                                         <div class="col-sm">
                                             <div class="selectbox">
-                                                <form action="{{ route('companies.index') }}" method="GET">
-                                                    <label for="brand">Chọn</label>
-                                                    <select name="select-item" id="companies"
+                                                <form action="{{ route('persons.index') }}" method="GET">
+                                                    <label>Chọn</label>
+                                                    <select name="select-item" id="persons"
                                                         style="width: 50px; height:38px" onchange="this.form.submit()">
                                                         <option value="10">10</option>
                                                         <option value="20">20</option>
@@ -93,7 +93,6 @@
                                             </div>
                                         </div>
                                         <div class="col-sm d-flex justify-content-end">
-                                            <a href="{{ route('companies.create') }}" class="btn btn-success">Tạo mới</a>
                                             <button class="btn btn-danger delete-all"
                                                 onclick="return confirm('Bạn có chắc muốn xóa những công ty này không?')">Xóa
                                                 all</button>
@@ -106,27 +105,35 @@
                                     <thead>
                                         <tr>
                                             <th><input type="checkbox"></th>
-                                            <th>Code</th>
-                                            <th>Công ty</th>
+                                            <th>Nhân viên</th>
+                                            <th>Email</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
+                                            <th>Công ty</th>
                                             <th>Ngày tạo</th>
                                             <th>Ngày update</th>
                                             <th>Hoạt động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data['companies'] as $value)
+                                        @foreach ($data['persons'] as $value)
                                             <tr>
                                                 <td>
                                                     <input type="checkbox" value="{{ $value->id }}">
                                                 </td>
-                                                <td>{{ $value->code }}</td>
-                                                <td>{{ $value->name }}</td>
+                                                <td>{{ $value->full_name }}</td>
+                                                <td>{{ $value->user->email }}</td>
+                                                <td>{{ checkPersonGender($value->gender) }}</td>
+                                                <td class="text-primary">{{ $value->birthdate }}</td>
+                                                <td class="text-success">{{ $value->phone_number }}</td>
                                                 <td>{{ $value->address }}</td>
+                                                <td>{{ $value->company->name }}</td>
                                                 <td class="text-primary">{{ $value->created_at }}</td>
                                                 <td class="text-primary">{{ $value->updated_at }}</td>
                                                 <td class="d-flex justify-content-center">
-                                                    <form action="{{ route('companies.destroy', encrypt($value->id)) }}"
+                                                    <form action="{{ route('persons.destroy', encrypt($value->id)) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
@@ -138,11 +145,11 @@
                                                             <div class="dropdown-menu text-center"
                                                                 aria-labelledby="dropdownMenuButton">
                                                                 <a class="dropdown-item"
-                                                                    href="{{ route('companies.edit', encrypt($value->id)) }}">
+                                                                    href="{{ route('persons.edit', encrypt($value->id)) }}">
                                                                     <i class="text-primary mr-1 fa fa-edit"></i>Sửa
                                                                 </a>
                                                                 <button type="submit" class="dropdown-item"
-                                                                    onclick="return confirm('Bạn có chắc muốn xóa công ty này không?')">
+                                                                    onclick="return confirm('Bạn có chắc muốn xóa nhân viên này không?')">
                                                                     <i class="text-danger mr-1 fa fa-trash"></i>Xóa
                                                                 </button>
                                                             </div>
@@ -155,9 +162,9 @@
                                 </table>
                             </div>
                         </div>
-                        @if (!empty($data['companies']))
+                        @if (!empty($data['persons']))
                             <div class="col-lg-12 mt-3 d-flex justify-content-center">
-                                {{ $data['companies']->links('pagination::bootstrap-4') }}
+                                {{ $data['persons']->links('pagination::bootstrap-4') }}
                             </div>
                         @endif
                     </div>
@@ -213,7 +220,7 @@
                 }
                 //Kiểm tra nếu có ít nhất một sản phẩm đã được chọn
                 if (selectedIds.length > 0) {
-                    fetch('{{ route('companies.delete_all') }}', {
+                    fetch('{{ route('persons.delete_all') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -234,7 +241,7 @@
                         })
                         .catch(error => console.error('Error:', error));
                 } else {
-                    alert('Vui lòng chọn ít nhất một công ty để xóa!');
+                    alert('Vui lòng chọn ít nhất một nhân viên để xóa!');
                 }
             });
         });

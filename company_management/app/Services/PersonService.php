@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
-use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Person\PersonRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Validator;
 
-class UserService
+class PersonService
 {
-    protected $userRepository;
+    protected $personRepository;
     protected $today;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(PersonRepositoryInterface $personRepository)
     {
-        $this->userRepository = $userRepository;
+        $this->personRepository = $personRepository;
         $this->today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
     }
 
@@ -23,12 +24,11 @@ class UserService
         $filter = array_filter($params);
 
         try {
-            $users = $this->userRepository->all($filter);
-            $users->load('person');
+            $persons = $this->personRepository->all($filter);
 
             return [
                 'status' => 200,
-                'users' => $users,
+                'persons' => $persons,
             ];
         } catch (Exception $exception) {
             return [
@@ -40,13 +40,13 @@ class UserService
 
     public function store($request)
     {
-        $input = $request->only('email', 'password', 'is_active');
+        $input = $request->only('user_id', 'company_id', 'full_name', 'gender', 'birthdate', 'phone_number', 'address');
 
         try {
-            $user = $this->userRepository->store($input);
+            $person = $this->personRepository->store($input);
             return [
                 'status' => 200,
-                'data' => $user
+                'data' => $person
             ];
         } catch (Exception $exception) {
             return [
@@ -59,8 +59,8 @@ class UserService
     public function edit($id)
     {
         try {
-            $user = $this->userRepository->edit(decrypt($id));
-            if (is_null($user)) {
+            $person = $this->personRepository->edit(decrypt($id));
+            if (is_null($person)) {
                 return [
                     'success' => false,
                     'status' => 404,
@@ -69,7 +69,7 @@ class UserService
             }
             return [
                 'status' => 200,
-                'data' => $user
+                'data' => $person
             ];
         } catch (Exception $exception) {
             return [
@@ -81,11 +81,11 @@ class UserService
 
     public function update($request, $id)
     {
-        $input = $request->only('password', 'is_active');
+        $input = $request->only('company_id', 'full_name', 'gender', 'birthdate', 'phone_number', 'address');
         $input['updated_at'] = $this->today;
 
-        $user = $this->edit($id);
-        if ($user['status'] != 200) {
+        $person = $this->edit($id);
+        if ($person['status'] != 200) {
             return [
                 'success' => false,
                 'status' => 404,
@@ -93,11 +93,25 @@ class UserService
             ];
         }
 
+        $resultCheck = true;
+        $inputPhoneNumber = $input['phone_number'];
+        $listPerson = $this->getListPerson();
+        $checkPhoneNumber = in_array($inputPhoneNumber, $listPerson['listPhoneNumber']);
+
+        if ($checkPhoneNumber && $inputPhoneNumber != $person['data']['phone_number']) {
+            $resultCheck = false;
+            return [
+                'status' => 400,
+                'checkIsset' => $resultCheck,
+                'message' => "Số điện thoại $inputPhoneNumber đã tồn tại!",
+            ];
+        }
+
         try {
-            $user = $this->userRepository->update($input, decrypt($id));
+            $person = $this->personRepository->update($input, decrypt($id));
             return [
                 'status' => 200,
-                'data' => $user
+                'data' => $person
             ];
         } catch (Exception $exception) {
             return [
@@ -109,8 +123,8 @@ class UserService
 
     public function destroy($id)
     {
-        $user = $this->edit($id);
-        if ($user['status'] != 200) {
+        $person = $this->edit($id);
+        if ($person['status'] != 200) {
             return [
                 'success' => false,
                 'status' => 404,
@@ -119,7 +133,7 @@ class UserService
         }
 
         try {
-            $user = $this->userRepository->destroy(decrypt($id));
+            $person = $this->personRepository->destroy(decrypt($id));
             return [
                 'status' => 200,
             ];
@@ -135,11 +149,11 @@ class UserService
     {
         // Lấy mảng dữ liệu từ phần thân yêu cầu
         $requestData = $request->json()->all();
-        // Truy cập mảng UserIds trong dữ liệu
-        $userIds = $requestData['listIds'];
+        // Truy cập mảng personIds trong dữ liệu
+        $personIds = $requestData['listIds'];
 
         try {
-            $this->userRepository->deleteAll($userIds);
+            $this->personRepository->deleteAll($personIds);
             return [
                 'status' => 200,
             ];
@@ -149,5 +163,10 @@ class UserService
                 'error' => $exception->getMessage()
             ];
         }
+    }
+
+    public function getListPerson()
+    {
+        return $this->personRepository->getListPerson();
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\PersonController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,5 +35,9 @@ Route::middleware(['auth'])->group(function() {
         // Company
         Route::resource('companies', CompanyController::class);
         Route::post('delete-all-company', [CompanyController::class, 'deleteAll'])->name('companies.delete_all');
+
+        // Person
+        Route::resource('persons', PersonController::class);
+        Route::post('delete-all-person', [PersonController::class, 'deleteAll'])->name('persons.delete_all');
     });
 });
