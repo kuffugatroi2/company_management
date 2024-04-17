@@ -14,7 +14,7 @@
         <div class="profile clearfix">
             <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>Tú Nguyễn</h2>
+                <h2>{{ getInfoUser() }}</h2>
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -32,7 +32,7 @@
                     <li><a><i class="fa fa-group"></i> Quản lý nhân sự <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Quản lý user</a></li>
-                            <li><a href="#"><i class="fa fa-user"></i> Quản lý nhân viên</a></li>
+                            <li><a href="{{ route('persons.index') }}"><i class="fa fa-user"></i> Quản lý nhân viên</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-building-o"></i> Quản lý phòng ban</a>

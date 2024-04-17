@@ -62,12 +62,12 @@ class CompanyFormRequest extends FormRequest
             'code.unique' => "Mã $code đã tồn tại!",
             'code.regex' => "Mã code không được nhập khoảng trắng",
             'name.required' => "Bạn chưa nhập tên công ty",
-            'name.min' => "Lỗi! Tên công ty không được ngắn hơn 10 ký tự",
-            'name.max' => "Lỗi! Tên công ty không được ngắn hơn 100 ký tự",
+            'name.min' => "Tên công ty không được ngắn hơn 10 ký tự",
+            'name.max' => "Tên công ty không được ngắn hơn 100 ký tự",
             'name.unique' => "Công ty $name đã tồn tại!",
             'address.required' => "Bạn chưa nhập địa chỉ công ty",
-            'address.min' => "Lỗi! Tên công ty không được ngắn hơn 20 ký tự",
-            'address.max' => "Lỗi! Tên công ty không được ngắn hơn 100 ký tự",
+            'address.min' => "Địa chỉ công ty không được ngắn hơn 20 ký tự",
+            'address.max' => "Địa chỉ công ty không được ngắn hơn 100 ký tự",
         ];
     }
 }

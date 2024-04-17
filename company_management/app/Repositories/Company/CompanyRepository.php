@@ -34,15 +34,18 @@ class CompanyRepository extends AbstractRepository implements CompanyRepositoryI
     {
         $listCodeCompany = $this->getModel()->whereNull('deleted_at')->pluck('code')->toArray();
         $listNameCompany = $this->getModel()->whereNull('deleted_at')->pluck('name')->toArray();
+        $listCompany = $this->getModel()->whereNull('deleted_at')->select('id', 'name')->get();
+
         return [
             'listCodeCompany' => $listCodeCompany,
             'listNameCompany' => $listNameCompany,
+            'listCompany' => $listCompany,
         ];
     }
 
-    public function deleteAll($userIds)
+    public function deleteAll($companyIds)
     {
-        $this->getModel()->whereIn('id', $userIds)->delete();
+        $this->getModel()->whereIn('id', $companyIds)->delete();
         return;
     }
 }

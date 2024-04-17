@@ -11,13 +11,6 @@ class Company extends Model
     use HasFactory;
     use SoftDeletes;
 
-    const ACTIVE = 'active';
-    const UNACTIVE = 'unactive';
-    const ARRAYSTATUS = [
-        Company::ACTIVE,
-        Company::UNACTIVE,
-    ];
-
     protected $fillable = [
         'code', 'name', 'address', 'created_at', 'updated_at'
     ];
@@ -25,4 +18,9 @@ class Company extends Model
     protected $dates = ['deleted_at'];
 
     protected $table = 'company';
+
+    public function persons()
+    {
+        return $this->hasMany(person::class);
+    }
 }

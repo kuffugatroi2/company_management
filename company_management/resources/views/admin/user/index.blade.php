@@ -112,15 +112,21 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data['users'] as $value)
+                                            @php
+                                                $checkIssetPerson = false;
+                                                if ($value->relationLoaded('person') && !is_null($value->person)) {
+                                                    $checkIssetPerson = true;
+                                                }
+                                            @endphp
                                             <tr>
                                                 <td>
-                                                    {{-- <input type="checkbox" value="{{ $value->id }}"
-                                                        {{ isset($listIdBrand) ? checkDisabled($value->id, $listIdBrand) : '' }}> --}}
-                                                    <input type="checkbox" value="{{ $value->id }}">
+                                                    <input type="checkbox" value="{{ $value->id }}"
+                                                        {{ $checkIssetPerson == false ? '' : 'disabled' }}>
                                                 </td>
                                                 <td>{{ $value->email }}</td>
                                                 <td>{{ \Illuminate\Support\Str::limit($value->password, 20, '...') }}</td>
-                                                <td class="{{ $value->is_active == 'active' ? 'text-success' : 'text-danger' }}">
+                                                <td
+                                                    class="{{ $value->is_active == 'active' ? 'text-success' : 'text-danger' }}">
                                                     {{ $value->is_active }}
                                                 </td>
                                                 <td class="text-primary">{{ $value->created_at }}</td>
@@ -135,16 +141,23 @@
                                                                 role="button" aria-expanded="false"><i
                                                                     class="h2 fa fa-navicon"></i>
                                                             </label>
-                                                            <div class="dropdown-menu text-center"
-                                                                aria-labelledby="dropdownMenuButton">
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                                 <a class="dropdown-item"
                                                                     href="{{ route('users.edit', encrypt($value->id)) }}">
                                                                     <i class="text-primary mr-1 fa fa-edit"></i>Sửa
                                                                 </a>
-                                                                <button type="submit" class="dropdown-item"
-                                                                    onclick="return confirm('Bạn có chắc muốn xóa user này không?')">
-                                                                    <i class="text-danger mr-1 fa fa-trash"></i>Xóa
-                                                                </button>
+                                                                @if ($checkIssetPerson == false)
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('persons.create', ['user_id' => encrypt($value->id)]) }}">
+                                                                        <i
+                                                                            class="text-success mr-1 fa fa-plus-circle"></i>Tạo
+                                                                        nhân sự
+                                                                    </a>
+                                                                    <button type="submit" class="dropdown-item"
+                                                                        onclick="return confirm('Bạn có chắc muốn xóa user này không?')">
+                                                                        <i class="text-danger mr-1 fa fa-trash"></i>Xóa
+                                                                    </button>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </form>
