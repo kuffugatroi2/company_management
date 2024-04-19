@@ -94,7 +94,7 @@
                                         </div>
                                         <div class="col-sm d-flex justify-content-end">
                                             <button class="btn btn-danger delete-all"
-                                                onclick="return confirm('Bạn có chắc muốn xóa những công ty này không?')">Xóa
+                                                onclick="return confirm('Bạn có chắc muốn xóa những nhân viên này không?')">Xóa
                                                 all</button>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@
                                                 </td>
                                                 <td>{{ $value->full_name }}</td>
                                                 <td>{{ $value->user->email }}</td>
-                                                <td>{{ checkPersonGender($value->gender) }}</td>
+                                                <td>{!! checkPersonGender($value->gender) !!}</td>
                                                 <td class="text-primary">{{ $value->birthdate }}</td>
                                                 <td class="text-success">{{ $value->phone_number }}</td>
                                                 <td>{{ $value->address }}</td>
