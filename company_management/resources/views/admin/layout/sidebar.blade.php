@@ -33,6 +33,7 @@
                         <ul class="nav child_menu">
                             <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Quản lý user</a></li>
                             <li><a href="{{ route('persons.index') }}"><i class="fa fa-user"></i> Quản lý nhân viên</a></li>
+                            <li><a href="{{ route('roles.index') }}"><i class="fa fa-sitemap"></i> Quản lý vai trò</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-building-o"></i> Quản lý phòng ban</a>
