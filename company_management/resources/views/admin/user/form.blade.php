@@ -25,7 +25,8 @@
                             <div class="col-md-6 col-sm-6">
                                 <input type="email" id="email" class="form-control" data-validate-length-range="6"
                                     data-validate-words="2" name="email" placeholder="Nhập email" required
-                                    value="{{ $user['data']->email ?? '' }}" {{ isset($user['data']->email) ? 'readonly' : ''}}/>
+                                    value="{{ $user['data']->email ?? '' }}"
+                                    {{ isset($user['data']->email) ? 'readonly' : '' }} />
                                 @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -46,36 +47,61 @@
                                 @error('password')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
-                                @if (session('error'))
-                                    <div class="text-danger">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-3 col-sm-3 label-align">Trạng thái</label>
                             @if (!empty($user['data']->is_active))
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" value="active" name="is_active"
+                                    <input class="flat" type="radio" value="active" name="is_active"
                                         @if ($user['data']->is_active == 'active') checked @endif>
-                                    <label class="form-check-label" for="inlineradio">Active</label>
+                                    <label class="form-check-label ml-1" for="inlineradio">Active</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" value="unactive" name="is_active"
+                                    <input class="flat" type="radio" value="unactive" name="is_active"
                                         @if ($user['data']->is_active == 'unactive') checked @endif>
-                                    <label class="form-check-label" for="inlineradio">Unactive</label>
+                                    <label class="form-check-label ml-1" for="inlineradio">Unactive</label>
                                 </div>
                             @else
                                 <div class="form-check form-check-inline ml-3">
-                                    <input class="form-check-input" type="radio" value="active" name="is_active" checked>
-                                    <label class="form-check-label" for="inlineradio">Active</label>
+                                    <input class="flat" type="radio" value="active" name="is_active" checked>
+                                    <label class="form-check-label ml-1" for="inlineradio">Active</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" value="unactive" name="is_active">
-                                    <label class="form-check-label" for="inlineradio">Unactive</label>
+                                    <input class="flat" type="radio" value="unactive" name="is_active">
+                                    <label class="form-check-label ml-1" for="inlineradio">Unactive</label>
                                 </div>
                             @endif
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3 label-align">Vai trò<span
+                                    class="text-danger h5">*</span></label>
+                            <div class="form-check form-check-inline ml-3">
+                                @foreach ($roles as $key => $value)
+                                    <span class="mr-2">
+                                        @if (isset($user) && in_array($value->id, $user['listRole']))
+                                            <input type="checkbox" name="{{ $value->role }}" id="role"
+                                                value="{{ $value->role }}" data-parsley-mincheck="2" class="flat"
+                                                checked />
+                                            {{ $value->role }}
+                                        @else
+                                            <input type="checkbox" name="{{ $value->role }}" id="role"
+                                                value="{{ $value->role }}" data-parsley-mincheck="2" class="flat" />
+                                            {{ $value->role }}
+                                        @endif
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                            <div class="form-check form-check-inline ml-3">
+                                @if (session('errorRole'))
+                                    <div class="text-danger">
+                                        {{ session('errorRole') }}
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <div class="ln_solid">
                             <div class="form-group">

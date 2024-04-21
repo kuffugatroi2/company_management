@@ -32,4 +32,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         $this->getModel()->whereIn('id', $userIds)->delete();
         return;
     }
+
+    public function changeActive($id, $status)
+    {
+        $isActive = ($this->model::ACTIVE == $status) ? $this->model::UNACTIVE : $this->model::ACTIVE;
+        $this->getModel()->where('id', $id)->update(['is_active' => $isActive]);
+        return;
+    }
 }

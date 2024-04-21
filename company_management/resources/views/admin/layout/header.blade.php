@@ -11,7 +11,7 @@
                         {{ getInfoUser() }}
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="javascript:;">
+                        <a class="dropdown-item" href="{{ route('users.show', encrypt(getIdUser())) }}">
                             <i class="fa fa-info-circle pull-right text-success"></i> Thông tin
                         </a>
                         <a class="dropdown-item" href="{{ route('users.edit', encrypt(getIdUser())) }}">

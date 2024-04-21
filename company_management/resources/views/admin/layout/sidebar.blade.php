@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title">
+            <a href="{{ route('admin.home_page') }}" class="site_title">
                 {{-- <i class="fa fa-paw"></i> --}}
                 <img src="img-logo/VT_luxury.png" alt="Logo" class="w-25">
                 <span>VT Luxury</span>
@@ -25,7 +25,7 @@
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <ul class="nav side-menu">
-                    <li><a><i class="fa fa-home"></i> Home</a>
+                    <li><a href="{{ route('admin.home_page') }}"><i class="fa fa-home"></i> Home</a>
                     </li>
                     <li><a href="{{ route('companies.index') }}"><i class="fa fa-building"></i> Quản lý công ty</a>
                     </li>

@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserFormRequest;
+use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $roleService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
+        $this->roleService = $roleService;
     }
 
     /**
@@ -35,10 +38,13 @@ class UserController extends Controller
      */
     public function create()
     {
+        $roles = $this->roleService->getListRole();
+
         $data = [
             'action' => route('users.store'),
             'method' => 'POST',
             'function' => 'create',
+            'roles' => $roles['getListRole'] ?? [],
         ];
 
         return view('Admin.user.form', $data);
@@ -51,6 +57,10 @@ class UserController extends Controller
     {
         $user = $this->userService->store($request);
 
+        if (isset($user['checkIsset']) && $user['checkIsset'] == false) {
+            return redirect()->back()->with('errorRole', $user['message']);
+        }
+
         if ($user['status'] == 500) {
             return response()->json(['error' => $user['error'], 'status' => $user['status']]);
         }
@@ -59,11 +69,26 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $user = $this->userService->edit($id);
+
+        $data = [
+            'user' => $user ?? [],
+        ];
+
+        return view('admin.user.detail-user', $data);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
         $user = $this->userService->edit($id);
+        $roles = $this->roleService->getListRole();
 
         if ($user['status'] == 404 || $user['status'] == 500) {
             return response()->json(['error' => $user['error'], 'status' => $user['status']]);
@@ -74,8 +99,9 @@ class UserController extends Controller
             'method' => 'POST',
             'function' => 'edit',
             'user' => $user ?? [],
-
+            'roles' => $roles['getListRole'] ?? [],
         ];
+
         return view('admin.user.form', $data);
     }
 
@@ -85,6 +111,10 @@ class UserController extends Controller
     public function update(UserFormRequest $request, $id)
     {
         $user = $this->userService->update($request, $id);
+
+        if (isset($user['checkIsset']) && $user['checkIsset'] == false) {
+            return redirect()->back()->with('errorRole', $user['message']);
+        }
 
         if ($user['status'] == 404 || $user['status'] == 500) {
             return response()->json(['error' => $user['error'], 'status' => $user['status']]);

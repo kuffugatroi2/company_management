@@ -143,6 +143,10 @@
                                                             </label>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                                 <a class="dropdown-item"
+                                                                    href="{{ route('users.show', encrypt($value->id)) }}" target="_blank">
+                                                                    <i class="text-success mr-1 fa fa-info"></i>Chi tiết
+                                                                </a>
+                                                                <a class="dropdown-item"
                                                                     href="{{ route('users.edit', encrypt($value->id)) }}">
                                                                     <i class="text-primary mr-1 fa fa-edit"></i>Sửa
                                                                 </a>
