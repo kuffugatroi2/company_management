@@ -35,5 +35,9 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Role\RoleRepositoryInterface',
             'App\Repositories\Role\RoleRepository'
         );
+        $this->app->bind(
+            'App\Repositories\RoleUser\RoleUserRepositoryInterface',
+            'App\Repositories\RoleUser\RoleUserRepository'
+        );
     }
 }

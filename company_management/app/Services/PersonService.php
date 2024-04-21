@@ -5,16 +5,19 @@ namespace App\Services;
 use App\Repositories\Person\PersonRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PersonService
 {
     protected $personRepository;
+    protected $userService;
     protected $today;
 
-    public function __construct(PersonRepositoryInterface $personRepository)
+    public function __construct(PersonRepositoryInterface $personRepository, UserService $userService)
     {
         $this->personRepository = $personRepository;
+        $this->userService = $userService;
         $this->today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
     }
 
@@ -131,13 +134,18 @@ class PersonService
                 'error' => 'not_found!'
             ];
         }
+        $userID = encrypt($person['data']->user_id);
 
+        DB::beginTransaction();
         try {
-            $person = $this->personRepository->destroy(decrypt($id));
+            $this->personRepository->destroy(decrypt($id));
+            $this->userService->changeActive($userID);
+            DB::commit();
             return [
                 'status' => 200,
             ];
         } catch (Exception $exception) {
+            DB::rollBack();
             return [
                 'status' => 500,
                 'error' => $exception->getMessage()

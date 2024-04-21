@@ -27,8 +27,11 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     public function getListRole()
     {
         $listRole = $this->getModel()->whereNull('deleted_at')->pluck('role')->toArray();
+        $getListRole = $this->getModel()->whereNull('deleted_at')->select('id', 'role')->get();
+
         return [
             'listRole' => $listRole,
+            'getListRole' => $getListRole,
         ];
     }
 
