@@ -59,6 +59,7 @@ class CompanyService
     {
         try {
             $company = $this->companyRepository->edit(decrypt($id));
+
             if (is_null($company)) {
                 return [
                     'success' => false,
@@ -66,9 +67,21 @@ class CompanyService
                     'error' => 'not_found!'
                 ];
             }
+
+            $departments = $company->departments;
+            $departmentParent = $departments->whereNull('parent_id');
+            $departmentChild = $departments->whereNotNull('parent_id');
+            $listIdDepartmentChild = $departmentChild->map(function($child) {
+                return $child->parent_id;
+            })->toArray();
+
             return [
                 'status' => 200,
-                'data' => $company
+                'data' => $company,
+                'departments' => $departments ?? [],
+                'departmentParent' => $departmentParent ?? [],
+                'departmentChild' => $departmentChild ?? [],
+                'listIdDepartmentChild' => array_unique($listIdDepartmentChild) ?? [],
             ];
         } catch (Exception $exception) {
             return [

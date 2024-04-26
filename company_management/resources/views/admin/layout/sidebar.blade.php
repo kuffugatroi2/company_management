@@ -36,7 +36,7 @@
                             <li><a href="{{ route('roles.index') }}"><i class="fa fa-sitemap"></i> Quản lý vai trò</a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-building-o"></i> Quản lý phòng ban</a>
+                    <li><a href="{{ route('departments.index') }}"><i class="fa fa-building-o"></i> Quản lý phòng ban</a>
                     </li>
                     <li><a><i class="fa fa-briefcase"></i> Quản lý dự án</a>
                     </li>
