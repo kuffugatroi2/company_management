@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PersonController;
 use App\Http\Controllers\Admin\RoleController;
@@ -44,5 +45,9 @@ Route::middleware(['auth'])->group(function () {
         // Role
         Route::resource('roles', RoleController::class);
         Route::post('delete-all-role', [RoleController::class, 'deleteAll'])->name('roles.delete_all');
+
+        // Department
+        Route::resource('departments', DepartmentController::class);
+        Route::post('delete-all-department', [DepartmentController::class, 'deleteAll'])->name('departments.delete_all');
     });
 });

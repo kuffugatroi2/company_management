@@ -74,7 +74,10 @@ class CompanyController extends Controller
             'method' => 'POST',
             'function' => 'edit',
             'company' => $company ?? [],
-
+            'departments' => $company['departments'] ?? [],
+            'departmentParent' => $company['departmentParent'] ?? [],
+            'departmentChild' => $company['departmentChild'] ?? [],
+            'listIdDepartmentChild' => $company['listIdDepartmentChild'] ?? [],
         ];
         return view('admin.company.form', $data);
     }
