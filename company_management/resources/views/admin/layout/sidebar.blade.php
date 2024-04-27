@@ -38,7 +38,7 @@
                     </li>
                     <li><a href="{{ route('departments.index') }}"><i class="fa fa-building-o"></i> Quản lý phòng ban</a>
                     </li>
-                    <li><a><i class="fa fa-briefcase"></i> Quản lý dự án</a>
+                    <li><a href="{{ route('projects.index') }}"><i class="fa fa-briefcase"></i> Quản lý dự án</a>
                     </li>
                     <li><a><i class="fa fa-tasks"></i> Quản lý công việc</a>
                     </li>

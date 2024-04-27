@@ -30,11 +30,18 @@ class PersonRepository extends AbstractRepository implements PersonRepositoryInt
         return $persons;
     }
 
-    public function getListPerson()
+    public function getListPerson($id = [])
     {
+        $idPerson = $id;
         $listPhoneNumber = $this->getModel()->whereNull('deleted_at')->pluck('phone_number')->toArray();
+
+        if (!empty($id)) {
+            $listPerson =  $this->getModel()->where('company_id', $idPerson)->whereNull('deleted_at')->get();
+        }
+
         return [
             'listPhoneNumber' => $listPhoneNumber,
+            'listPerson' => $listPerson,
         ];
     }
 

@@ -173,8 +173,8 @@ class PersonService
         }
     }
 
-    public function getListPerson()
+    public function getListPerson($id = [])
     {
-        return $this->personRepository->getListPerson();
+        return $this->personRepository->getListPerson(decrypt($id));
     }
 }

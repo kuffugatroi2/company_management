@@ -29,4 +29,9 @@ class Person extends Model
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_person', 'person_id', 'project_id')->withPivot('person_id', 'project_id', 'deleted_at');
+    }
 }

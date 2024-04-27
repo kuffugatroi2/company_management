@@ -43,5 +43,13 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Department\DepartmentRepositoryInterface',
             'App\Repositories\Department\DepartmentRepository'
         );
+        $this->app->bind(
+            'App\Repositories\Project\ProjectRepositoryInterface',
+            'App\Repositories\Project\ProjectRepository'
+        );
+        $this->app->bind(
+            'App\Repositories\ProjectPerson\ProjectPersonRepositoryInterface',
+            'App\Repositories\ProjectPerson\ProjectPersonRepository'
+        );
     }
 }
