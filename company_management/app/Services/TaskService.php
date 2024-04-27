@@ -2,22 +2,19 @@
 
 namespace App\Services;
 
-use App\Repositories\Person\PersonRepositoryInterface;
+use App\Repositories\Task\TaskRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
-class PersonService
+class TaskService
 {
-    protected $personRepository;
-    protected $userService;
+    protected $taskRepository;
     protected $today;
 
-    public function __construct(PersonRepositoryInterface $personRepository, UserService $userService)
+    public function __construct(TaskRepositoryInterface $taskRepository)
     {
-        $this->personRepository = $personRepository;
-        $this->userService = $userService;
+        $this->taskRepository = $taskRepository;
         $this->today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s');
     }
 
@@ -27,11 +24,11 @@ class PersonService
         $filter = array_filter($params);
 
         try {
-            $persons = $this->personRepository->all($filter);
+            $projects = $this->taskRepository->all($filter);
 
             return [
                 'status' => 200,
-                'persons' => $persons,
+                'projects' => $projects,
             ];
         } catch (Exception $exception) {
             return [
@@ -43,13 +40,14 @@ class PersonService
 
     public function store($request)
     {
-        $input = $request->only('user_id', 'company_id', 'full_name', 'gender', 'birthdate', 'phone_number', 'address');
+        $input = $request->only('project_id', 'person_id', 'name', 'description', 'start_time', 'end_time', 'priority', 'status');
+        $input['project_id'] = decrypt($request['project_id']);
 
         try {
-            $person = $this->personRepository->store($input);
+            $this->taskRepository->store(array_filter($input));
+
             return [
                 'status' => 200,
-                'data' => $person
             ];
         } catch (Exception $exception) {
             return [
@@ -62,17 +60,19 @@ class PersonService
     public function edit($id)
     {
         try {
-            $person = $this->personRepository->edit(decrypt($id));
-            if (is_null($person)) {
+            $task = $this->taskRepository->edit(decrypt($id));
+
+            if (is_null($task)) {
                 return [
                     'success' => false,
                     'status' => 404,
                     'error' => 'not_found!'
                 ];
             }
+
             return [
                 'status' => 200,
-                'data' => $person
+                'data' => $task,
             ];
         } catch (Exception $exception) {
             return [
@@ -84,11 +84,11 @@ class PersonService
 
     public function update($request, $id)
     {
-        $input = $request->only('company_id', 'full_name', 'gender', 'birthdate', 'phone_number', 'address');
+        $input = $request->only('project_id', 'person_id', 'name', 'description', 'start_time', 'end_time', 'priority', 'status');
+        $input['project_id'] = decrypt($request['project_id']);
         $input['updated_at'] = $this->today;
-
-        $person = $this->edit($id);
-        if ($person['status'] != 200) {
+        $task = $this->edit($id);
+        if ($task['status'] != 200) {
             return [
                 'success' => false,
                 'status' => 404,
@@ -97,21 +97,22 @@ class PersonService
         }
 
         $resultCheck = true;
-        $inputPhoneNumber = $input['phone_number'];
-        $listPerson = $this->getListPerson();
-        $checkPhoneNumber = in_array($inputPhoneNumber, $listPerson['listPhoneNumber']);
+        $inputNumber = $input['name'];
+        $listTask = $this->getListTask();
 
-        if ($checkPhoneNumber && $inputPhoneNumber != $person['data']['phone_number']) {
+        $checkName = in_array($inputNumber, $listTask['listNameTask']);
+
+        if ($checkName && $inputNumber != $task['data']['name']) {
             $resultCheck = false;
             return [
                 'status' => 400,
                 'checkIsset' => $resultCheck,
-                'message' => "Số điện thoại $inputPhoneNumber đã tồn tại!",
+                'message' => "nhiệm vụ $inputNumber đã tồn tại!",
             ];
         }
 
         try {
-            $person = $this->personRepository->update($input, decrypt($id));
+            $person = $this->taskRepository->update($input, decrypt($id));
             return [
                 'status' => 200,
                 'data' => $person
@@ -126,26 +127,22 @@ class PersonService
 
     public function destroy($id)
     {
-        $person = $this->edit($id);
-        if ($person['status'] != 200) {
+        $task = $this->edit($id);
+        if ($task['status'] != 200) {
             return [
                 'success' => false,
                 'status' => 404,
                 'error' => 'not_found!'
             ];
         }
-        $userID = encrypt($person['data']->user_id);
 
-        DB::beginTransaction();
         try {
-            $this->personRepository->destroy(decrypt($id));
-            $this->userService->changeActive($userID);
-            DB::commit();
+            $this->taskRepository->destroy(decrypt($id));
+
             return [
                 'status' => 200,
             ];
         } catch (Exception $exception) {
-            DB::rollBack();
             return [
                 'status' => 500,
                 'error' => $exception->getMessage()
@@ -157,11 +154,11 @@ class PersonService
     {
         // Lấy mảng dữ liệu từ phần thân yêu cầu
         $requestData = $request->json()->all();
-        // Truy cập mảng personIds trong dữ liệu
-        $personIds = $requestData['listIds'];
+        // Truy cập mảng taskIds trong dữ liệu
+        $taskIds = $requestData['listIds'];
 
         try {
-            $this->personRepository->deleteAll($personIds);
+            $this->taskRepository->deleteAll($taskIds);
             return [
                 'status' => 200,
             ];
@@ -173,13 +170,8 @@ class PersonService
         }
     }
 
-    public function getListPerson($id = [])
+    public function getListTask()
     {
-        return $this->personRepository->getListPerson(decrypt($id));
-    }
-
-    public function getPerson()
-    {
-        return $this->personRepository->getPerson();
+        return $this->taskRepository->getListTask();
     }
 }

@@ -51,5 +51,9 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\ProjectPerson\ProjectPersonRepositoryInterface',
             'App\Repositories\ProjectPerson\ProjectPersonRepository'
         );
+        $this->app->bind(
+            'App\Repositories\Task\TaskRepositoryInterface',
+            'App\Repositories\Task\TaskRepository'
+        );
     }
 }

@@ -31,10 +31,12 @@ class ProjectRepository extends AbstractRepository implements ProjectRepositoryI
     {
         $listCodeProject = $this->getModel()->whereNull('deleted_at')->pluck('code')->toArray();
         $listNameProject = $this->getModel()->whereNull('deleted_at')->pluck('name')->toArray();
+        $listProject = $this->getModel()->whereNull('deleted_at')->select('id', 'name')->get();
 
         return [
             'listCodeProject' => $listCodeProject,
             'listNameProject' => $listNameProject,
+            'listProject' => $listProject,
         ];
     }
 

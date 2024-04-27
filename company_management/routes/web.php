@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PersonController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,9 +51,14 @@ Route::middleware(['auth'])->group(function () {
         // Department
         Route::resource('departments', DepartmentController::class);
 
-        // projects
+        // project
         Route::resource('projects', ProjectController::class);
         Route::post('delete-all-project', [ProjectController::class, 'deleteAll'])->name('projects.delete_all');
         Route::get('persons-ajax/{idCompany}/{idProject}', [ProjectController::class, 'getPerson']);
+
+        // task
+        Route::resource('tasks', TaskController::class);
+        Route::post('delete-all-task', [TaskController::class, 'deleteAll'])->name('tasks.delete_all');
+        Route::get('tasks-ajax/{idProject}', [TaskController::class, 'getPerson']);
     });
 });
