@@ -45,6 +45,14 @@ class PersonRepository extends AbstractRepository implements PersonRepositoryInt
         ];
     }
 
+    public function getPerson()
+    {
+        $listPerson = $this->getModel()->whereNull('deleted_at')->select('id', 'full_name')->get();
+        return [
+            'listPerson' => $listPerson,
+        ];
+    }
+
     public function deleteAll($personIds)
     {
         $this->getModel()->whereIn('id', $personIds)->delete();
