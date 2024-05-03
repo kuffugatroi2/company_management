@@ -40,7 +40,7 @@
                     </li>
                     <li><a href="{{ route('projects.index') }}"><i class="fa fa-briefcase"></i> Quản lý dự án</a>
                     </li>
-                    <li><a><i class="fa fa-tasks"></i> Quản lý nhiệm vụ</a>
+                    <li><a href="{{ route('tasks.index') }}"><i class="fa fa-tasks"></i> Quản lý nhiệm vụ</a>
                     </li>
                 </ul>
             </div>

@@ -24,11 +24,11 @@ class TaskService
         $filter = array_filter($params);
 
         try {
-            $projects = $this->taskRepository->all($filter);
+            $tasks = $this->taskRepository->all($filter);
 
             return [
                 'status' => 200,
-                'projects' => $projects,
+                'tasks' => $tasks,
             ];
         } catch (Exception $exception) {
             return [

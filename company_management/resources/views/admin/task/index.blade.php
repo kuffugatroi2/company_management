@@ -134,6 +134,7 @@
                                             <button class="btn btn-danger delete-all"
                                                 onclick="return confirm('Bạn có chắc muốn xóa những nhiệm vụ này không?')">Xóa
                                                 all</button>
+                                            <a href="{{ route('tasks.export') }}" class="btn btn-primary">Excel</a>
                                         </div>
                                     </div>
                                 </div>
@@ -157,8 +158,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (isset($data['projects']) && !$data['projects']->isEmpty())
-                                            @foreach ($data['projects'] as $value)
+                                        @if (isset($data['tasks']) && !$data['tasks']->isEmpty())
+                                            @foreach ($data['tasks'] as $value)
                                                 <tr>
                                                     <td>
                                                         <input type="checkbox" value="{{ $value->id }}">
@@ -204,11 +205,11 @@
                                 </table>
                             </div>
                         </div>
-                        {{-- @if (!empty($data['companies']))
+                        @if (!empty($data['tasks']))
                             <div class="col-lg-12 mt-3 d-flex justify-content-center">
-                                {{ $data['projects']->links('pagination::bootstrap-4') }}
+                                {{ $data['tasks']->links('pagination::bootstrap-4') }}
                             </div>
-                        @endif --}}
+                        @endif
                     </div>
                 </div>
             </div>

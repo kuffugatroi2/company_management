@@ -60,5 +60,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('tasks', TaskController::class);
         Route::post('delete-all-task', [TaskController::class, 'deleteAll'])->name('tasks.delete_all');
         Route::get('tasks-ajax/{idProject}', [TaskController::class, 'getPerson']);
+        Route::get('export', [TaskController::class, 'export'])->name('tasks.export');
     });
 });

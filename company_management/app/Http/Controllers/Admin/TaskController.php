@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ExcelExports;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\TaskFormRequest;
 use App\Services\TaskService;
@@ -9,6 +10,7 @@ use App\Services\ProjectService;
 use App\Services\CompanyService;
 use App\Services\PersonService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TaskController extends Controller
 {
@@ -139,5 +141,10 @@ class TaskController extends Controller
         foreach ($persons as $person) {
             echo " <option value='" . $person->id . "'>" . $person->full_name . "</option>";
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExcelExports, 'tasks.xlsx');
     }
 }
