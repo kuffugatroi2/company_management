@@ -103,7 +103,7 @@
                                         <tr>
                                             <th><input type="checkbox"></th>
                                             <th>email</th>
-                                            <th>password</th>
+                                            <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                             <th>Ngày tạo</th>
                                             <th>Ngày update</th>
@@ -124,7 +124,15 @@
                                                         {{ $checkIssetPerson == false ? '' : 'disabled' }}>
                                                 </td>
                                                 <td>{{ $value->email }}</td>
-                                                <td>{{ \Illuminate\Support\Str::limit($value->password, 20, '...') }}</td>
+                                                <td>
+                                                    @foreach ($value->roles as $item)
+                                                        @if (!is_null($item->pivot->deleted_at))
+                                                            @continue
+                                                        @endif
+                                                        {{ $item->role}}
+                                                        <br>
+                                                    @endforeach
+                                                </td>
                                                 <td
                                                     class="{{ $value->is_active == 'active' ? 'text-success' : 'text-danger' }}">
                                                     {{ $value->is_active }}

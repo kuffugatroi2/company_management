@@ -99,7 +99,7 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PersonFormRequest $request,  $id)
+    public function update(PersonFormRequest $request, $id)
     {
         $person = $this->personService->update($request, $id);
 
