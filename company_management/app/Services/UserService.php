@@ -31,7 +31,7 @@ class UserService
         try {
             $users = $this->userRepository->all($filter);
             $users->load('person');
-
+            
             return [
                 'status' => 200,
                 'users' => $users,
@@ -115,7 +115,7 @@ class UserService
     {
         $input = $request->only('password', 'is_active');
         $input['updated_at'] = $this->today;
-        $inputRoles = $request->except('email', 'password', 'is_active', '_token', '_method');
+        $inputRoles = $request->except('email', 'password', 'password-again', 'is_active', '_token', '_method');
 
         $user = $this->edit($id);
 

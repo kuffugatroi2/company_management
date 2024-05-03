@@ -37,18 +37,52 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-3 col-sm-3 label-align">password<span
-                                    class="text-danger h5">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="password" id="password" class="form-control" data-validate-length-range="6"
-                                    data-validate-words="2" name="password" placeholder="Nhập password" required
-                                    value="{{ $user['data']->password ?? '' }}" />
-                                @error('password')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                        @if (isset($function) && $function == 'create')
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align">Mật khẩu<span
+                                        class="text-danger h5">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="password" id="password" class="form-control"
+                                        data-validate-length-range="6" data-validate-words="2" name="password"
+                                        placeholder="Nhập password" required />
+                                    @error('password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                                <div class="col-md-6 col-sm-6 ml-1">
+                                    <input type="checkbox" id="change-password">
+                                    <span>Đổi mật khẩu</span>
+                                </div>
+                            </div>
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align">Mật khẩu<span
+                                        class="text-danger h5">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="password" id="password" class="form-control password"
+                                        data-validate-length-range="6" data-validate-words="2" name="password"
+                                        placeholder="Nhập password" required disabled />
+                                    @error('password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align">Nhập lại mật khẩu<span
+                                        class="text-danger h5">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="password" id="password" class="form-control password"
+                                        data-validate-length-range="6" data-validate-words="2" name="password-again"
+                                        placeholder="Nhập lại password" required disabled />
+                                    @error('password-again')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endif
                         <div class="field item form-group">
                             <label class="col-form-label col-md-3 col-sm-3 label-align">Trạng thái</label>
                             @if (!empty($user['data']->is_active))
@@ -119,4 +153,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#change-password").change(function() {
+                if ($(this).is(":checked")) {
+                    $(".password").removeAttr('disabled')
+                } else {
+                    $(".password").attr('disabled', '')
+                }
+            });
+        });
+    </script>
 @endsection

@@ -22,7 +22,13 @@ class UserFormRequest extends FormRequest
     public function rules(): array
     {
         $parameter = $this->route()->parameters();
-        $rules = !empty($parameter) ? '' : 'unique:users,email';
+        if (!empty($parameter)) {
+            $rules = '';
+            $required = '';
+        } else {
+            $rules = 'unique:users,email';
+            $required = 'required';
+        }
 
         return [
             'email' => [
@@ -31,8 +37,11 @@ class UserFormRequest extends FormRequest
                 $rules,
             ],
             'password' => [
-                'required',
+                $required,
                 'min:6',
+            ],
+            'password-again' => [
+                'same:password'
             ],
         ];
     }
@@ -45,6 +54,7 @@ class UserFormRequest extends FormRequest
             'email.unique' => "Email $email đã tồn tại!",
             'password.required' => "Bạn chưa nhập Password",
             'password.min' => "Lỗi! Password không được ngắn hơn 6 ký tự",
+            'password-again.same' => "Mật khẩu không khớp nhau!"
         ];
     }
 }

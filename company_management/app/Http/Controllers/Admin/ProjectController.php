@@ -134,9 +134,9 @@ class ProjectController extends Controller
     public function getPerson($idCompany, $idProject)
     {
         $listPersonId = $this->projectPersonService->getListProjectPerson();
-        $persons = $this->personService->getListPerson($idCompany);
+        $persons = $this->personService->getListPersonByIdCompany($idCompany);
 
-        foreach ($persons['listPerson'] as $key => $person) {
+        foreach ($persons as $key => $person) {
             if (!$person->projects->isEmpty()) {
                 foreach ($person->projects as $value) {
                     if (in_array($person->id, $listPersonId['listUserid']) && $value->pivot->project_id == $idProject) {
